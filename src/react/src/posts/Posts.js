@@ -4,11 +4,11 @@ import cookie from "react-cookies";
 
 export const Posts = () => {
   const loadPosts = () => {
-    const endpoint = "/api/posts/";
+    const endpoint = "http://localhost:8000/api/posts/";
     let lookupOptions = {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
+        Accept: "application/json",
       },
     };
     fetch(endpoint, lookupOptions)
