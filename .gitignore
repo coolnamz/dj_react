@@ -138,5 +138,7 @@ venv.bak/
 .mypy_cache/
 
 
-## add
-migrations
+## migrations
+**/migrations/*
+!**/migrations/__init__.py
+

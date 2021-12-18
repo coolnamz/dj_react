@@ -23,8 +23,10 @@
     "build-renamer": "npm run renamer-js && npm run renamer-css",
     "renamer-css": "renamer --path-element name --find '/main\\.[\\d\\w]+/' --replace react_ui build/static/css/*.css",
     "renamer-js": "renamer --path-element name --find '/main\\.[\\d\\w]+/' --replace react_ui build/static/js/*.js",
-    "copy-build": "npm run copy-logo && npm run copy-css && npm run copy-js",
-    "copy-logo": "copyfiles -f build/static/media/* ../staticfiles/media/",
+    "copy-build": "npm run rm-media && npm run rm-media-root && npm run copy-media && npm run copy-css && npm run copy-js",
+    "rm-media": "rimraf ../staticfiles/media/*",
+    "rm-media-root": "rimraf ../../static/media/*",
+    "copy-media": "copyfiles -f build/static/media/* ../staticfiles/media/",
     "copy-js": "copyfiles -f build/static/js/*.js ../staticfiles/js/",
     "copy-css": "copyfiles -f build/static/css/*.css ../staticfiles/css/",
     "collectstatic": "python ../manage.py collectstatic --no-input"
