@@ -5,10 +5,10 @@
 FROM python:3.8.10
 
 # # Node.js 설치
-RUN apt-get update
-RUN apt-get install curl
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
-RUN apt-get install -y nodejs
+# RUN apt-get update
+# RUN apt-get install curl
+# RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+# RUN apt-get install -y nodejs
 
 # container directory for django codes
 WORKDIR /usr/src/app
@@ -22,11 +22,6 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
 RUN pip install python-memcached
-
-# install required packages (React)
-# WORKDIR /usr/src/app/react
-# RUN npm install 
-# RUN npm run collect
 
 # port
 EXPOSE 8000
