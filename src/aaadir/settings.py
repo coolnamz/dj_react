@@ -11,23 +11,31 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False),
+    DEV=(bool, False)
+)
+# reading .env file
+environ.Env.read_env(
+    env_file=os.path.join(BASE_DIR, 'django.env')
+)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ksy0*&5)&=lxwj-7g+$zepz3#2*vt#os^nbi5o&2#k_s5s6ee@'
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
+SECRET_KEY = env("SECRET_KEY") 
+DEBUG = int(env("DEBUG", default=0))
+ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS").split(" ")
+SITE_ID = int(env("SITE_ID", default=1))
 
 # Application definition
 
@@ -80,13 +88,24 @@ WSGI_APPLICATION = 'aaadir.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if int(env("DEV")): 
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env("MYSQL_DATABASE"),
+            'USER': env("MYSQL_USER"), 
+            'PASSWORD': env("MYSQL_PASSWORD"),
+            'HOST': env("MYSQL_HOST"), 
+            'PORT': env("MYSQL_PORT"), 
+        }
+    }   
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
@@ -121,16 +140,6 @@ USE_I18N = True
 # USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.0/howto/static-files/
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'staticfiles'), 
-]
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
-
-
 CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
@@ -151,3 +160,36 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# SSL
+if int(env("HTTPS")):
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.0/howto/static-files/
+
+if int(env("DEV")):
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'staticfiles'), 
+    ]
+    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
+
+else:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
+    
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+# FILE_UPLOAD_PERMISSIONS=0o640
+
+# Email
+EMAIL_USE_TLS = int(env("EMAIL_USE_TLS"))
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = int(env("EMAIL_PORT"))
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
