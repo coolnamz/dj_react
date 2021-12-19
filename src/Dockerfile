@@ -4,12 +4,17 @@
 # Pull python image
 FROM python:3.8.10
 
+# # Node.js 설치
+RUN apt-get update
+RUN apt-get install curl
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN apt-get install -y nodejs
+
 # container directory for django codes
 WORKDIR /usr/src/app
 
-# Node.js 설치
-RUN apt-get update
-RUN apt-get install nodejs
+# copy files to /usr/src/app
+# COPY . .
 
 # install required packages (Django)
 COPY requirements.txt ./
@@ -19,16 +24,14 @@ RUN pip install gunicorn
 RUN pip install python-memcached
 
 # install required packages (React)
-RUN cd react
-RUN npm install
-RUN npm collect
-
-# copy files to /usr/src/app
-#COPY . .
+# WORKDIR /usr/src/app/react
+# RUN npm install 
+# RUN npm run collect
 
 # port
 EXPOSE 8000
 
 # gunicorn
-#CMD ["python", "manage.py", "runserver", "0.0.0.0:5000"]
+WORKDIR /usr/src/app
+#CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "aaadir.wsgi:application"]

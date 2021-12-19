@@ -20,6 +20,7 @@ services:
     command: gunicorn aaadir.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - ./src:/usr/src/app
+      - ./static:/usr/src/static
     expose:
       - "8000"
     depends_on:
@@ -30,7 +31,7 @@ services:
     ports:
       - "3306:3306/tcp"
     env_file:
-      - ./django/.env
+      - ./src/django.env
     volumes:
       - ./db/data:/var/lib/mysql
       - ./db/data/conf.d:/etc/mysql/conf.d

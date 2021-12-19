@@ -140,3 +140,4 @@ static/*
 !static/blank.txt
 
 django.env
+db
