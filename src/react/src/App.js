@@ -10,7 +10,9 @@ const App = () => {
         <img src={logo} className="App-logo" alt="logo" />
         <h1 className="App-title">Welcome to React</h1>
       </header>
-      <p className="App-intro">안녕하세요. 리액트 페이지입니다.</p>
+      <h1>App.js</h1>
+      <p className="App-intro">Build된 javascript 파일을 잘 읽어왔습니다</p>
+      <hr />
       <Posts />
     </div>
   );

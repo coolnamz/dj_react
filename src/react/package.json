@@ -24,7 +24,7 @@
     "collect-dev": "react-scripts build && npm run build-renamer && npm run copy-build-dev",
     "copy-build-dev": "npm run rm-media-dev && npm run copy-media-dev && npm run copy-css-dev && npm run copy-js-dev",
     "rm-media-dev": "rimraf ../staticfiles/media/*",
-    "copy-logo-dev": "copyfiles -f build/static/media/* ../staticfiles/media/",
+    "copy-media-dev": "copyfiles -f build/static/media/* ../staticfiles/media/",
     "copy-js-dev": "copyfiles -f build/static/js/*.js ../staticfiles/js/",
     "copy-css-dev": "copyfiles -f build/static/css/*.css ../staticfiles/css/",
     "collect": "react-scripts build && npm run build-renamer && npm run copy-build",

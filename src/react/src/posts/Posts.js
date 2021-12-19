@@ -29,7 +29,8 @@ export const Posts = () => {
 
   return (
     <React.Fragment>
-      <h1>포스트 페이지</h1>
+      <h1>Posts.js</h1>
+      <p>콘솔에 Django API에서 불러온 json 내용이 표시됩니다</p>
     </React.Fragment>
   );
 };
