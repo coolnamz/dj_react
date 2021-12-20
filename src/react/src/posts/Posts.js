@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "whatwg-fetch";
 import cookie from "react-cookies";
 
 import PostInline from "./PostInline";

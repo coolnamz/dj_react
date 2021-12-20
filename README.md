@@ -67,3 +67,11 @@ media는 hash 포함된 이름이 static으로 제공되는 것 허용해 볼 �
 ```
     "renamer-logo": "renamer --path-element name --find '/([\\w\\d]+)\\.[\\d\\w]+/' --replace $1 build/static/media/\*",
 ```
+
+# package.json
+
+proxy를 django API 포트로 지정해 줌
+
+```
+"proxy": "http://localhost:8000",
+```
