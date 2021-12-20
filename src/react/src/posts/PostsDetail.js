@@ -5,7 +5,7 @@ function PostsDetail({ item }) {
   return (
     <div className="posts-list">
       <h2>
-        <Link to={`/post/${item.slug}`}>{item.title}</Link>
+        <Link to={`/posts/${item.slug}`}>{item.title}</Link>
       </h2>
     </div>
   );

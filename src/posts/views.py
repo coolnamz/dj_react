@@ -5,13 +5,6 @@ from .permissions import IsOwnerOrReadOnly
 from .serializers import PostSerializer
 
 
-class PostDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset            = Post.objects.all()
-    serializer_class    = PostSerializer
-    lookup_field        = 'slug'
-    permission_classes  = [IsOwnerOrReadOnly]
-
-
 class PostListCreateAPIView(generics.ListCreateAPIView):
     queryset            = Post.objects.all()
     serializer_class    = PostSerializer
@@ -21,3 +14,8 @@ class PostListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
+class PostDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset            = Post.objects.all()
+    serializer_class    = PostSerializer
+    lookup_field        = 'slug'
+    permission_classes  = [IsOwnerOrReadOnly]

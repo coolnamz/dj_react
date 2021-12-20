@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
 function PostPage(match) {
@@ -23,7 +23,9 @@ function PostPage(match) {
   return (
     <div>
       <h1>{post ? post.title : ""}</h1>
+      <p>작성일: {post ? post.publish : ""}</p>
       <p>{post ? post.content : ""}</p>
+      <Link to="/posts">목록으로 이동</Link>
     </div>
   );
 }

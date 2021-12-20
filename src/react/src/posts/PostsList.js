@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import cookie from "react-cookies";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 import PostsDetail from "./PostsDetail";
 
@@ -32,6 +33,9 @@ function PostsList() {
       ) : (
         <p>No post found</p>
       )}
+      <Link to="/posts/create">
+        <h3>포스트 생성</h3>
+      </Link>
     </div>
   );
 }
