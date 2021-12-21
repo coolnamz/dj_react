@@ -22,7 +22,7 @@ function Login() {
       password: password,
     };
 
-    fetch("/api/v1/users/auth/login/", {
+    fetch("/api/auth/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

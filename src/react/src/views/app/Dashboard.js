@@ -1,34 +1,20 @@
 import React, { useState, useEffect, Fragment } from "react";
+import checkAuth from "../auth/checkAuth";
 
 const Dashboard = () => {
-  const [userEmail, setUserEmail] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+  const [authenticated, setAuth] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("token") === null) {
-      window.location.replace("/auth/login");
-    } else {
-      fetch("/api/v1/users/auth/user/", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${localStorage.getItem("token")}`,
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          setUserEmail(data.email);
-          setLoading(false);
-        });
-    }
+    checkAuth(setAuth, setUserData);
   }, []);
 
   return (
     <div>
-      {loading === false && (
+      {authenticated && (
         <Fragment>
           <h1>Dashboard</h1>
-          <h2>Hello {userEmail}!</h2>
+          <h2>Hello {userData && userData.email}!</h2>
         </Fragment>
       )}
     </div>

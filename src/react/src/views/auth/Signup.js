@@ -24,7 +24,7 @@ function Signup() {
       password2: password2,
     };
 
-    fetch("/api/v1/users/auth/register/", {
+    fetch("/api/auth/register/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
