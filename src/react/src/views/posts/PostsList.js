@@ -25,13 +25,11 @@ function PostsList() {
     <div>
       <h1>포스트 페이지</h1>
 
-      {postdata ? (
-        postdata.map((postItem, index) => {
-          return <PostsDetail item={postItem} key={index} />;
-        })
-      ) : (
-        <p>No post found</p>
-      )}
+      {postdata
+        ? postdata.map((postItem, index) => {
+            return <PostsDetail item={postItem} key={index} />;
+          })
+        : ""}
       <Link to="/posts/create">
         <h3>포스트 생성</h3>
       </Link>

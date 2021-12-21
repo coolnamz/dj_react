@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import cookie from "react-cookies";
-import CSRFToken from "../components/csrftoken";
-
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 function PostCreate() {
-  const csrfToken = cookie.load("csrftoken");
   const initialData = {
     title: null,
     content: null,
@@ -23,37 +18,44 @@ function PostCreate() {
   const [input_data, SetInputData] = useState(initialData);
   const [valid, setValid] = useState(initialValid);
   const [valid_feedback, setValidFeedback] = useState(initialValid);
-
+  const token = localStorage.getItem("token");
   // useEffect(() => {
   //   getPostsList();
   // }, []);
 
   async function createPost(data) {
     const config = {
-      credentials: "include",
-      mode: "same-origin",
       headers: {
-        Accept: "application/json",
         "Content-Type": "application/json",
-        "X-CSRFToken": csrfToken,
+        Authorization: `Token ${localStorage.getItem("token")}`,
       },
     };
 
-    axios.post("/api/posts/", data, config);
-    // .then((response) => console.log(response))
-    // .catch((e) => console.log(e));
+    try {
+      const response = await axios.post("/api/posts/", data, config);
+    } catch (error) {
+      console.error(error);
+    }
 
-    // try {
-    //   const response = await axios.post("/api/posts/", data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    // fetch("http://localhost:8000/api/posts/", {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization: `Token ${localStorage.getItem("token")}`,
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(data),
+    // })
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     console.log(data);
+    //   });
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     // console.log("Submitted");
-    console.log(input_data);
+    // console.log(input_data);
+    // console.log(JSON.stringify(input_data));
     createPost(input_data);
   }
 

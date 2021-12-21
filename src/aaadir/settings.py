@@ -54,7 +54,15 @@ INSTALLED_APPS = [
 
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account', 
+    'allauth.socialaccount',
+    'rest_auth.registration',
 
+    'users',
     'posts',
 ]
 
@@ -137,6 +145,30 @@ USE_I18N = True
 # USE_TZ = True
 
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+## Custom user model
+
+AUTH_USER_MODEL = 'users.CustomUser'
+AUTHENTICATION_BACKENDS = (    
+    "django.contrib.auth.backends.ModelBackend",    
+    "allauth.account.auth_backends.AuthenticationBackend",
+)
+SITE_ID = 1 
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+
+## CORS settings
+
 CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
@@ -145,7 +177,7 @@ CORS_ORIGIN_WHITELIST = (
     # 'your-domain.com',
     # 'your-bucket-here.s3-us-west-2.amazonaws.com',
 )
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -156,21 +188,20 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
 #     )
 # }
 
+
+# REST Framework settings
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ),
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+    'DEFAULT_AUTHENTICATION_CLASSES': (   # 순서도 중요함 token부터!
+        'rest_framework.authentication.TokenAuthentication',  
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ),
+    'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S", 
 }
-
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Database
@@ -204,9 +235,9 @@ else:
 
 
 # Email
-EMAIL_USE_TLS = int(env("EMAIL_USE_TLS"))
-EMAIL_HOST = env("EMAIL_HOST")
-EMAIL_HOST_USER = env("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
-EMAIL_PORT = int(env("EMAIL_PORT"))
-DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+# EMAIL_USE_TLS = int(env("EMAIL_USE_TLS"))
+# EMAIL_HOST = env("EMAIL_HOST")
+# EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+# EMAIL_PORT = int(env("EMAIL_PORT"))
+# DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
