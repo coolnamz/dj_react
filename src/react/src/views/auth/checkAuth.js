@@ -1,4 +1,4 @@
-function checkAuth(setAuth, setData = null) {
+function CheckAuth(setAuth, setData = null) {
   if (localStorage.getItem("token") === null) {
     window.location.replace("/auth/login");
   } else {
@@ -17,4 +17,4 @@ function checkAuth(setAuth, setData = null) {
   }
 }
 
-export default checkAuth;
+export default CheckAuth;

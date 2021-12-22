@@ -13,6 +13,8 @@ import PostPage from "./views/posts/PostPage";
 import Login from "./views/auth/Login";
 import Logout from "./views/auth/Logout";
 import Signup from "./views/auth/Signup";
+import PassReset from "./views/auth/PassReset";
+import PassResetConfirm from "./views/auth/PassResetConfirm";
 import Dashboard from "./views/app/Dashboard";
 
 function App() {
@@ -26,6 +28,11 @@ function App() {
         <Route path="/auth/signup" element={<Signup />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/auth/logout" element={<Logout />} />
+        <Route path="/auth/password-reset" element={<PassReset />} />
+        <Route
+          path="/auth/password-reset/:uid/:token/confirm"
+          element={<PassResetConfirm />}
+        />
         <Route path="/posts" element={<PostsList />} />
         <Route path="/posts/:slug" element={<PostPage />} />
         <Route path="/posts/create" element={<PostCreate />} />

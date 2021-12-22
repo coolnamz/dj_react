@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import cookie from "react-cookies";
-import checkAuth from "../auth/checkAuth";
+import CheckAuth from "../auth/CheckAuth";
 
 function PostCreate() {
   const initialData = {
@@ -16,49 +15,52 @@ function PostCreate() {
     draft: null,
     publish: null,
   };
-  const [input_data, SetInputData] = useState(initialData);
+  const [inputData, SetInputData] = useState(initialData);
   const [valid, setValid] = useState(initialValid);
   const [valid_feedback, setValidFeedback] = useState(initialValid);
   const [authenticated, setAuth] = useState(false);
 
   useEffect(() => {
-    checkAuth(setAuth);
+    CheckAuth(setAuth);
   }, []);
 
-  async function createPost(data) {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${localStorage.getItem("token")}`,
-      },
-    };
-
-    try {
-      const response = await axios.post("/api/posts/", data, config);
-    } catch (error) {
-      console.error(error);
-    }
-
-    // fetch("http://localhost:8000/api/posts/", {
-    //   method: "POST",
+  function createPost(inputData) {
+    // const config = {
     //   headers: {
-    //     Authorization: `Token ${localStorage.getItem("token")}`,
     //     "Content-Type": "application/json",
+    //     Authorization: `Token ${localStorage.getItem("token")}`,
     //   },
-    //   body: JSON.stringify(data),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     console.log(data);
-    //   });
+    // };
+
+    // try {
+    //   const response = await axios.post("/api/posts/", inputData, config);
+    //   console.log(response.data);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+    fetch("/api/posts/", {
+      method: "POST",
+      headers: {
+        Authorization: `Token ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(inputData),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    // console.log("Submitted");
-    // console.log(input_data);
-    // console.log(JSON.stringify(input_data));
-    createPost(input_data);
+  function handleSubmit(e) {
+    e.preventDefault();
+    createPost(inputData);
   }
 
   function handleInputChange(event) {

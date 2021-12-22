@@ -64,6 +64,11 @@ function Navbar() {
                     회원가입
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link to="/auth/password-reset" className="nav-link">
+                    비밀번호초기화
+                  </Link>
+                </li>
               </Fragment>
             )}
           </ul>

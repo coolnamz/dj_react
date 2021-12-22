@@ -5,20 +5,26 @@ import { Link } from "react-router-dom";
 import PostsDetail from "./PostsDetail";
 
 function PostsList() {
-  const PostsAPIAddress = `/api/posts`;
   const [postdata, setPosts] = useState(null);
 
   useEffect(() => {
     getPostsList();
   }, []);
 
-  async function getPostsList() {
-    try {
-      const response = await axios.get(PostsAPIAddress);
-      setPosts(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+  function getPostsList() {
+    fetch("/api/posts/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setPosts(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (

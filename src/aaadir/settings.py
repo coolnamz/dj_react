@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
-    'rest_auth.registration',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     'django.contrib.sites',
     'allauth',
     'allauth.account', 
@@ -124,7 +124,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'staticfiles'), 
 ]
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
+if not int(env("DEV")): 
+    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'static')
     
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -191,6 +192,7 @@ CORS_ORIGIN_WHITELIST = (
 
 # REST Framework settings
 
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -202,7 +204,9 @@ REST_FRAMEWORK = {
     ),
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S", 
 }
-
+REST_AUTH_SERIALIZERS = {
+    'PASSWORD_RESET_SERIALIZER': 'accounts.serializers.CustomPasswordResetSerializer',
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
@@ -234,10 +238,15 @@ else:
 #     CSRF_COOKIE_SECURE = False
 
 
-# Email
+
+## Email
+### 연습용
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+### 실제
 # EMAIL_USE_TLS = int(env("EMAIL_USE_TLS"))
 # EMAIL_HOST = env("EMAIL_HOST")
 # EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 # EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 # EMAIL_PORT = int(env("EMAIL_PORT"))
-# DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")

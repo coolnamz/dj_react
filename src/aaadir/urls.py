@@ -15,12 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.views.generic import TemplateView
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='react.html')),
+    re_path('^$', TemplateView.as_view(template_name='react.html')),
     path('admin/', admin.site.urls),
     path('api/auth/', include('users.urls')),
-    path('api/posts/', include('posts.urls'))
+    path('api/posts/', include('posts.urls')),
+    
+    # this url is used to generate email content
+    re_path(r'^auth/password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
+        TemplateView.as_view(template_name="password_reset_confirm.html"),
+        name='password_reset_confirm'),
+
+
+    re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name='react.html')),    
 ]

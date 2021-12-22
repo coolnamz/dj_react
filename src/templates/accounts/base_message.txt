@@ -1,0 +1,6 @@
+{% load i18n %}{% autoescape off %}{% blocktrans with site_name=current_site.name %}안녕하세요. {{ site_name }}에서 보내는 메일입니다.{% endblocktrans %}
+
+{% block content %}{% endblock %}
+
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}감사합니다!{% endblocktrans %}
+{% endautoescape %}

@@ -5,7 +5,7 @@ import axios from "axios";
 function PostPage(match) {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
-  const PostAPIAddress = `/api/posts/${slug}`;
+  const PostAPIAddress = `/api/posts/${slug}/`;
 
   useEffect(() => {
     getPost();
