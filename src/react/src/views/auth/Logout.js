@@ -1,6 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Logout() {
+function Logout(props) {
+  const navigate = useNavigate();
   // const [isAuth, setIsAuth] = useState(false);
 
   // useEffect(() => {
@@ -24,8 +26,9 @@ function Logout() {
       .then((res) => res.json())
       .then((data) => {
         localStorage.clear();
-        window.location.replace("/");
-        // navigate("/");
+        navigate("/");
+        props.setIsAuth(false);
+        // window.location.replace("/");
       });
   };
 

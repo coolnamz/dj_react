@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function PassReset() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState(null);
 
   function sendEmail(inputData) {
@@ -12,11 +15,14 @@ function PassReset() {
       body: JSON.stringify(inputData),
     })
       .then((response) => {
+        if (response.ok) {
+          navigate("/");
+        }
         return response.json();
       })
-      .then((data) => {
-        console.log(data);
-      })
+      // .then((data) => {
+      //   console.log(data);
+      // })
       .catch((err) => {
         console.log(err);
       });
@@ -30,18 +36,22 @@ function PassReset() {
   }
 
   return (
-    <form className="col-lg-6 mx-auto my-3 text-left" onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
+      <div className="mb-3 text-center">
+        <h2>비밀번호 초기화</h2>
+      </div>
+      <div className="mb-3 text-center">
+        <p>이메일로 비밀번호 초기화를 위한 링크를 보내드립니다.</p>
+      </div>
       <div className="form-group">
-        <div className="mb-3">
-          <label className="form-label" htmlFor="title">
-            이메일
-          </label>
+        <div className="mb-5">
+          <label className="form-label" htmlFor="title"></label>
           <input
             type="text"
             id="title"
             name="title"
             className="form-control"
-            placeholder="이메일 주소를 입력해주세요"
+            placeholder="가입 시 등록한 이메일 주소를 입력해주세요"
             required="required"
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -52,9 +62,9 @@ function PassReset() {
             초기화
           </button>
           &emsp;
-          <button type="button" className="btn btn-warning col-5 col-lg-3">
+          <Link to="/" type="button" className="btn btn-warning col-5 col-lg-3">
             취소
-          </button>
+          </Link>
         </div>
       </div>
     </form>

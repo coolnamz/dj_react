@@ -62,13 +62,13 @@ function App() {
               <Route path="posts" element={<PostsList />} />
               <Route path="posts/:slug" element={<PostPage />} />
               <Route path="posts/create" element={<PostCreate />} />
-              <Route path="logout" element={<Logout />} />
+              <Route path="logout" element={<Logout setIsAuth={setIsAuth} />} />
             </Route>
           </Routes>
         </div>
       ) : (
         <div>
-          <AuthBase />
+          <AuthBase setIsAuth={setIsAuth} />
         </div>
       )}
     </div>
