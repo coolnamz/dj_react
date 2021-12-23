@@ -1,23 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
     {% include 'css.html' %}
     <title>Django with React frontend</title>
   </head>
   <body>
-    <div class='container-fluid'>
-        {% include 'navbar.html' %}
-
-        {% block content %}
-            
-        {% endblock content %}
-
-    </div>  
-
+    <div>
+      {% include 'header.html' %} {% block content %} {% endblock content %}
+    </div>
 
     {% include 'js.html' %}
   </body>

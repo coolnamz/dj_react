@@ -1,5 +1,6 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { Link } from "react-router-dom";
+import logo from "../logo.svg";
 
 function Navbar() {
   const [isAuth, setIsAuth] = useState(false);
@@ -7,14 +8,23 @@ function Navbar() {
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
       setIsAuth(true);
+    } else {
+      setIsAuth(false);
     }
   }, []);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container">
         <Link to="/" className="navbar-brand">
-          Post Page
+          <img
+            src={logo}
+            width="35"
+            height="35"
+            className="App-logo d-inline-block align-center"
+            alt=""
+          />
+          React
         </Link>
         <button
           className="navbar-toggler"
@@ -34,7 +44,7 @@ function Navbar() {
                 Home
               </Link>
             </li>
-            {isAuth === true ? (
+            {isAuth ? (
               <Fragment>
                 <li className="nav-item">
                   <Link to="/dashboard" className="nav-link">
@@ -47,7 +57,7 @@ function Navbar() {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/auth/logout" className="nav-link">
+                  <Link to="/logout" className="nav-link">
                     로그아웃
                   </Link>
                 </li>
@@ -55,17 +65,17 @@ function Navbar() {
             ) : (
               <Fragment>
                 <li className="nav-item">
-                  <Link to="/auth/login" className="nav-link">
+                  <Link to="/login" className="nav-link">
                     로그인
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/auth/signup" className="nav-link">
+                  <Link to="/signup" className="nav-link">
                     회원가입
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/auth/password-reset" className="nav-link">
+                  <Link to="/password-reset" className="nav-link">
                     비밀번호초기화
                   </Link>
                 </li>
@@ -75,33 +85,6 @@ function Navbar() {
         </div>
       </div>
     </nav>
-
-    // <nav>
-    //   <h1>Django React Auth</h1>
-    //   <ul>
-    //     {isAuth === true ? (
-    //       <Fragment>
-    //         {" "}
-    //         <li>
-    //           <Link to="/posts">Dashboard</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/auth/logout">Logout</Link>
-    //         </li>
-    //       </Fragment>
-    //     ) : (
-    //       <Fragment>
-    //         {" "}
-    //         <li>
-    //           <Link to="/auth/login">Login</Link>
-    //         </li>
-    //         <li>
-    //           <Link to="/auth/signup">Signup</Link>
-    //         </li>
-    //       </Fragment>
-    //     )}
-    //   </ul>
-    // </nav>
   );
 }
 

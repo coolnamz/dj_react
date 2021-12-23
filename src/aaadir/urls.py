@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, RedirectView
 from django.urls import path, include, re_path
 
 
@@ -25,10 +25,9 @@ urlpatterns = [
     path('api/posts/', include('posts.urls')),
     
     # this url is used to generate email content
-    re_path(r'^auth/password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
-        TemplateView.as_view(template_name="password_reset_confirm.html"),
+    re_path(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
+        RedirectView.as_view(url="confirm"),
         name='password_reset_confirm'),
-
 
     re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name='react.html')),    
 ]

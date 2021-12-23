@@ -1,49 +1,76 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-
 import "bootstrap/dist/css/bootstrap.min.css";
+import { useIdleTimer } from "react-idle-timer";
 
 import "./App.css";
-import Header from "./components/Header";
 import Navbar from "./components/Navbar";
+
 import HomeUI from "./components/HomeUI";
+import AuthBase from "./views/auth/AuthBase";
 import PostsList from "./views/posts/PostsList";
 import PostCreate from "./views/posts/PostCreate";
 import PostPage from "./views/posts/PostPage";
-import Login from "./views/auth/Login";
 import Logout from "./views/auth/Logout";
-import Signup from "./views/auth/Signup";
-import PassReset from "./views/auth/PassReset";
-import PassResetConfirm from "./views/auth/PassResetConfirm";
 import Dashboard from "./views/app/Dashboard";
 
 function App() {
-  return (
-    <div className="App">
-      <Header />
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<HomeUI />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/auth/logout" element={<Logout />} />
-        <Route path="/auth/password-reset" element={<PassReset />} />
-        <Route
-          path="/auth/password-reset/:uid/:token/confirm"
-          element={<PassResetConfirm />}
-        />
-        <Route path="/posts" element={<PostsList />} />
-        <Route path="/posts/:slug" element={<PostPage />} />
-        <Route path="/posts/create" element={<PostCreate />} />
-      </Routes>
+  const [isAuth, setIsAuth] = useState(false);
 
-      {/* <Routes>
-        <Route path="/" element={<HomeUI />} />
-        <Route path="/posts" element={<PostsList />} />
-        <Route path="/posts/:slug" element={<PostPage />} />
-        <Route path="/posts/create" element={<PostCreate />} />
-      </Routes> */}
+  useEffect(() => {
+    if (localStorage.getItem("token") !== null) {
+      setIsAuth(true);
+    } else {
+      setIsAuth(false);
+    }
+  }, []);
+
+  // 특정시간동안 활동이 없으면 logout 시행
+  const handleOnIdle = (event) => {
+    if (isAuth) {
+      fetch("/api/auth/logout/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Token ${localStorage.getItem("token")}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          localStorage.clear();
+          window.location.replace("/");
+        });
+      const logoutTime = new Date(getLastActiveTime());
+      console.log("Last active time:", logoutTime);
+    }
+  };
+  const { getLastActiveTime } = useIdleTimer({
+    timeout: 1000 * 60 * 20,
+    onIdle: handleOnIdle,
+    debounce: 500,
+  });
+
+  return (
+    <div>
+      {isAuth ? (
+        <div>
+          <Navbar />
+          <Routes>
+            <Route path="/">
+              <Route index element={<HomeUI />} />
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="posts" element={<PostsList />} />
+              <Route path="posts/:slug" element={<PostPage />} />
+              <Route path="posts/create" element={<PostCreate />} />
+              <Route path="logout" element={<Logout />} />
+            </Route>
+          </Routes>
+        </div>
+      ) : (
+        <div>
+          <AuthBase />
+        </div>
+      )}
     </div>
   );
 }

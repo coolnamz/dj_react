@@ -1,10 +1,31 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap");
+body {
+  overflow-y: scroll;
+  font-family: "Noto Sans KR", sans-serif;
+} */
+.height70 {
+  min-height: 70vh;
+}
+
+h1 {
+  font-size: 200%;
+  font-weight: bolder;
+}
+a {
+  color: steelblue;
+  text-decoration: none;
+}
+a:hover {
+  color: dodgerblue;
+  text-decoration: none;
+}
+
 .App {
   text-align: center;
 }
 
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
-  height: 80px;
 }
 
 .App-header {
@@ -33,4 +54,7 @@
 
 .text-left {
   text-align: left;
+}
+.text-warning {
+  color: darkred;
 }

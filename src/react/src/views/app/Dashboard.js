@@ -3,15 +3,15 @@ import CheckAuth from "../auth/CheckAuth";
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
-  const [authenticated, setAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    CheckAuth(setAuth, setUserData);
+    CheckAuth(setIsAuth, setUserData);
   }, []);
 
   return (
     <div>
-      {authenticated && (
+      {isAuth && (
         <Fragment>
           <h1>Dashboard</h1>
           <h2>Hello {userData && userData.email}!</h2>
