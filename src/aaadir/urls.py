@@ -21,10 +21,17 @@ from django.urls import path, include, re_path
 urlpatterns = [
     re_path('^$', TemplateView.as_view(template_name='react.html')),
     path('admin/', admin.site.urls),
+
+    # 계정 confirm 처리를 시행하는 url (이메일로 전송된 것) - api/auth보다 앞에 위치해야 함
+    re_path(
+        r'^api/auth/register/account-confirm-email/(?P<key>[-:\w]+)/$', RedirectView.as_view(url="confirm"),
+        name='account_confirm_email',
+    ),
+
     path('api/auth/', include('users.urls')),
     path('api/posts/', include('posts.urls')),
-    
-    # this url is used to generate email content
+
+    # 패스워드 재설정 처리를 시행하는 url (이메일로 전송된 것)
     re_path(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
         RedirectView.as_view(url="confirm"),
         name='password_reset_confirm'),

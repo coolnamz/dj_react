@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}이메일 인증을 위한 메일입니다{% endblocktrans %}
+{% endautoescape %}

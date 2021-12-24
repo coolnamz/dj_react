@@ -5,7 +5,7 @@ function Login(props) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState(false);
+  const [errors, setErrors] = useState("");
   // const [isAuth, setIsAuth] = useState(false);
 
   // useEffect(() => {
@@ -42,8 +42,20 @@ function Login(props) {
           setEmail("");
           setPassword("");
           localStorage.clear();
-          setErrors(true);
+          setErrors("로그인 중 오류 발생");
         }
+        if (data.non_field_errors) {
+          if (/^이메일\s주소/.test(data.non_field_errors)) {
+            setErrors("이메일 인증을 완료하여 주세요,");
+          } else if (/^주어진\s자격/.test(data.non_field_errors[0])) {
+            setErrors("이메일 주소/비밀번호를 다시 확인해주세요.");
+          } else {
+            setErrors("로그인 중 오류 발생");
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -76,19 +88,19 @@ function Login(props) {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      {errors === true && (
+      {errors && (
         <div className="login-content">
           <p className="text-danger text-center">
-            <b>[로그인 실패]</b> 이메일 주소/비밀번호를 다시 확인해주세요.
+            <b>[로그인 실패]</b> {errors}
           </p>
         </div>
       )}
-      <div className="d-grid col-10 col-lg-6 mt-5 mx-auto">
-        <input className="btn btn-primary" type="submit" value="로그인" />
+      <div className="d-grid col-10 col-lg-6 my-5 mx-auto">
+        <input className="btn btn-steelblue" type="submit" value="로그인" />
       </div>
-      <div className="my-4 text-center">
-        <a href="">아이디 찾기</a> |{" "}
-        <Link to="/password-reset"> 비밀번호 초기화</Link>
+      <div className="my-3 text-center">
+        <Link to="/password-reset"> 비밀번호 초기화</Link> |
+        <Link to="/resend-mail"> 인증메일 재발송</Link>
       </div>
       <div className="form-group text-center">
         계정이 없으신가요? <Link to="/signup">회원 가입</Link>

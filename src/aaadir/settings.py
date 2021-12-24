@@ -165,7 +165,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
 ## CORS settings
@@ -175,10 +175,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',  
+    'http://localhost:8000',  
     # 'your-domain.com',
     # 'your-bucket-here.s3-us-west-2.amazonaws.com',
 )
-# CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -195,7 +196,7 @@ CORS_ORIGIN_WHITELIST = (
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (   # 순서도 중요함 token부터!
         'rest_framework.authentication.TokenAuthentication',  
@@ -204,10 +205,12 @@ REST_FRAMEWORK = {
     ),
     'DATETIME_FORMAT': "%Y-%m-%d %H:%M:%S", 
 }
-# REST_AUTH_SERIALIZERS = {
-#     'PASSWORD_RESET_SERIALIZER': 'accounts.serializers.CustomPasswordResetSerializer',
-# }
-
+REST_AUTH_SERIALIZERS = {
+    # 'PASSWORD_RESET_SERIALIZER': 'accounts.serializers.CustomPasswordResetSerializer',
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.CustumRegisterSerializer',
+}
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 

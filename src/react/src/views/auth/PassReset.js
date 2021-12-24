@@ -14,15 +14,10 @@ function PassReset() {
       },
       body: JSON.stringify(inputData),
     })
-      .then((response) => {
-        if (response.ok) {
-          navigate("/");
-        }
-        return response.json();
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
       })
-      // .then((data) => {
-      //   console.log(data);
-      // })
       .catch((err) => {
         console.log(err);
       });
@@ -37,14 +32,14 @@ function PassReset() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mb-3 text-center">
+      <div className="my-3 text-center">
         <h2>비밀번호 초기화</h2>
       </div>
-      <div className="mb-3 text-center">
+      <div className="my-3 text-center">
         <p>이메일로 비밀번호 초기화를 위한 링크를 보내드립니다.</p>
       </div>
       <div className="form-group">
-        <div className="mb-5">
+        <div className="my-5 mx-3">
           <label className="form-label" htmlFor="title"></label>
           <input
             type="text"
@@ -58,11 +53,15 @@ function PassReset() {
           <div className="invalid-feedback">{}</div>
         </div>
         <div className="d-flex justify-content-center">
-          <button type="submit" className="btn btn-primary col-5 col-lg-3">
+          <button type="submit" className="btn btn-seagreen col-5 col-lg-3">
             초기화
           </button>
           &emsp;
-          <Link to="/" type="button" className="btn btn-warning col-5 col-lg-3">
+          <Link
+            to="/"
+            type="button"
+            className="btn btn-slategray col-5 col-lg-3"
+          >
             취소
           </Link>
         </div>
