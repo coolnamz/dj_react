@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-function PassReset() {
+function ResendMail() {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [error, setError] = useState("");
 
   function sendEmail(inputData) {
-    fetch("/api/auth/password/reset/", {
+    fetch("/api/auth/register/resend-email/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,11 +16,12 @@ function PassReset() {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (/^패스워드\s초기화\s이메일/.test(data.detail)) {
-          navigate("/password-reset/email-sended");
+        if (data.detail === "ok") {
+          navigate("/resend-mail/email-sended");
         } else {
           setError(data.detail);
         }
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);
@@ -38,12 +38,13 @@ function PassReset() {
   return (
     <form onSubmit={handleSubmit}>
       <div className="my-3 text-center">
-        <h2>비밀번호 초기화</h2>
+        <h2>인증 메일 재발송</h2>
       </div>
-      <div className="my-3 text-center">
-        <p>이메일로 비밀번호 초기화를 위한 링크를 보내드립니다.</p>
-      </div>
+
       <div className="form-group">
+        <div className="my-3 text-center">
+          <p>계정에 대한 인증을 위한 메일을 재발송합니다.</p>
+        </div>
         <div className="my-5 mx-3">
           <label className="form-label" htmlFor="title"></label>
           <input
@@ -66,20 +67,19 @@ function PassReset() {
         )}
         <div className="d-flex justify-content-center">
           <button type="submit" className="btn btn-seagreen col-5 col-lg-3">
-            초기화
+            재발송
           </button>
           &emsp;
-          <Link
-            to="/"
-            type="button"
+          <button
+            onClick={() => navigate(-1)}
             className="btn btn-slategray col-5 col-lg-3"
           >
             취소
-          </Link>
+          </button>
         </div>
       </div>
     </form>
   );
 }
 
-export default PassReset;
+export default ResendMail;

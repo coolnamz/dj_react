@@ -62,6 +62,10 @@ function Signup() {
         <p className="my-0 py-1">
           이메일 인증이 필요하고, 그 후 관리자 승인이 필요합니다.
         </p>
+        <p className="my-0 py-1">
+          아직 이메일 인증이 완료되지 않았다면
+          <Link to="/resend-mail"> 인증메일 재발송</Link>
+        </p>
         <p className="my-0 py-1">관리자 승인까지 시간이 소요될 수 있습니다.</p>
       </div>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-function EmailSended(props) {
+function PassResetDone() {
   return (
     <div>
       <div className="my-3 text-center">
@@ -17,11 +17,10 @@ function EmailSended(props) {
         </svg>
       </div>
       <div className="mb-5 text-center">
-        <h1 className="text-success">메일 발송 완료</h1>
+        <h1 className="text-success">비밀번호 재설정 완료</h1>
       </div>
       <div className="text-center">
-        <p>{props.infoText}</p>
-        <p>귀하의 이메일을 확인하여 주세요.</p>
+        <p>재설정한 비밀번호로 다시 로그인 해 보시기 바랍니다.</p>
       </div>
       <div className="d-flex justify-content-center my-2">
         <Link to="/" type="button" className="btn btn-slategray col-8 col-lg-6">
@@ -32,4 +31,4 @@ function EmailSended(props) {
   );
 }
 
-export default EmailSended;
+export default PassResetDone;

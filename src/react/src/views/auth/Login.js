@@ -99,8 +99,7 @@ function Login(props) {
         <input className="btn btn-steelblue" type="submit" value="로그인" />
       </div>
       <div className="my-3 text-center">
-        <Link to="/password-reset"> 비밀번호 초기화</Link> |
-        <Link to="/resend-mail"> 인증메일 재발송</Link>
+        <Link to="/password-reset"> 비밀번호 초기화</Link>
       </div>
       <div className="form-group text-center">
         계정이 없으신가요? <Link to="/signup">회원 가입</Link>
