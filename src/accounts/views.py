@@ -1,18 +1,18 @@
-from django.contrib import messages
 from django.views.generic import TemplateView
+from django.contrib import messages
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.template.loader import render_to_string
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from allauth.account.models import EmailAddress
 from allauth.account.views import ConfirmEmailView
 from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
 import requests
 
+from allauth.account.models import EmailAddress
 from users.models import CustomUser
-from aaadir.utils import account_activation_token
+from .utils import account_activation_token
 
 
 
@@ -39,7 +39,14 @@ class CustomConfirmEmailView(ConfirmEmailView):
         email_user = confirmation.email_address
 
         if not email_user.verified:
+            status = "not_verified"
             user = get_object_or_404(CustomUser, email=email_user)
+
+            # 사용자 1차 인증은 승인
+            user.email_verified = True
+            user.save()
+
+            # 관리자 2차 인증을 위한 메일 관리자에게 보내기
             user_id = user.pk
             token = account_activation_token.make_token(user)
             activate_url = reverse("account_activate_root", kwargs={"id": user_id, "token": token})
@@ -55,8 +62,15 @@ class CustomConfirmEmailView(ConfirmEmailView):
                 message, 
                 to=[to_email]
             )
-            email.send()
-            status = "not_verified"
+            try:
+                email.send()
+            except:
+                context = {
+                    "title": "이메일 전송 실패",
+                    "text1": "이메일 전송 시스템에 문제가 발생하였습니다.",
+                    "text2": f"{to_email}로 직접 인증 요청을 해 주시기 바랍니다."
+                }
+                return render(self.request, "account/email_confirm_done.html", context)
         else:
             status = "already_verified"
 
@@ -87,24 +101,20 @@ class CustomConfirmEmailView(ConfirmEmailView):
         # user.save()
         
         if status == "already_verified":
-            context_title1 = "✓ 인증이 이미 완료된 계정"
-            context_title2 = ""
+            context_title = "✓ 인증이 이미 완료된 계정"
             context_text1 = "이미 인증이 완료된 계정입니다."
             context_text2 = "다시 로그인을 시도해보시기 바랍니다."
         elif status == "not_verified":
-            context_title1 = "✓ 이메일 인증 완료"
-            context_title2 = "✗ 관리자 인증 필요"
-            context_text1 = "로그인을 위해서는 관리자 인증이 추가로 필요합니다."
-            context_text2 = "관리자 인증은 2~5일 가량 소요될 수 있습니다."
+            context_title = "✓ 관리자 승인 요청 발송"
+            context_text1 = "계정 활성화를 위해 관리자 승인을 요청하였습니다."
+            context_text2 = "관리자 승인은 2~5일 가량 소요될 수 있습니다."
         else:
-            context_title1 = ""
-            context_title2 = "✗ 존재하지 않는 계정"
+            context_title = "✗ 존재하지 않는 계정"
             context_text1 = "존재하지 않는 계정입니다."
             context_text2 = "다시 확인해주시기 바랍니다."
 
         context = {
-            "title1": context_title1,
-            "title2": context_title2,
+            "title": context_title,
             "text1": context_text1,
             "text2": context_text2
         }
@@ -160,8 +170,7 @@ def account_activate_from_root(request, id, token):
 class ResendMail(TemplateView):
     template_name = "account/email_confirm_user_resend.html"
 
-    def post(self, request):
-        # 인증 메일 재발송
+    def post(self, request):        
         api_email_resend = request.build_absolute_uri("/api/auth/register/resend-email/")
         email_post = request.POST['email']
         data = {'email': email_post}
@@ -172,9 +181,16 @@ class ResendMail(TemplateView):
                 status = "already_verified"
             else:
                 status = "not_verified"
+                # 인증 메일 재발송
                 response = requests.post(api_email_resend, data)
-        except EmailAddress.DoesNotExist:
+        except:
                 status = "not_exist"
+                context = {
+                    "title": "이메일 전송 실패",
+                    "text1": "이메일 전송 시스템에 문제가 발생하였습니다.",
+                    "text2": ""
+                }
+                return render(self.request, "account/email_confirm_done.html", context)
 
         redirect_url = reverse("account-confirm-user-resend") + "?email=" + email_post
         redirect_url = redirect_url + "&status=" + status

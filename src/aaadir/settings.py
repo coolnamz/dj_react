@@ -52,6 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+     # allauth.account보다 위에 위치해야 함
+    'users',
+    'accounts',
+
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -62,8 +66,8 @@ INSTALLED_APPS = [
     'allauth.account', 
     'allauth.socialaccount',
 
-    'users',
     'posts',
+
 ]
 
 MIDDLEWARE = [

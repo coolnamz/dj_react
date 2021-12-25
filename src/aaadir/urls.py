@@ -14,32 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import TemplateView
 from django.urls import path, include, re_path
-from .views import CustomConfirmEmailView, ResendMail, account_activate_from_root
+
 
 urlpatterns = [
     re_path('^$', TemplateView.as_view(template_name='react.html')),
     path('admin/', admin.site.urls),
 
-    # User가 1차로 계정 이메일 인증 - api/auth보다 앞에 위치해야 함
-    re_path(
-        r'^api/auth/register/account-confirm-email/(?P<key>[-:\w]+)/$', CustomConfirmEmailView.as_view(),
-        name='account_confirm_user',
-    ),
-    path('account-confirm-user/resend-mail/', ResendMail.as_view(), name='account-confirm-user-resend'),
-
-    # Root user가 2차로 계정 최종 승인
-    path('account-activate-root/<int:id>/<str:token>/', account_activate_from_root, name='account_activate_root'),
-
     # API path
-    path('api/auth/', include('users.urls')),
+    path('api/auth/', include('accounts.urls')),
     path('api/posts/', include('posts.urls')),
-
-    # 패스워드 재설정 처리를 시행하는 url (이메일로 전송된 것)
-    re_path(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
-        RedirectView.as_view(url="confirm"),
-        name='password_reset_confirm'),
-
+    
+    # 그 외 모든 url은 Reactjs로 보냄
     re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name='react.html')),    
 ]

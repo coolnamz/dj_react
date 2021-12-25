@@ -1,0 +1,27 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{{ title }}{% endblock %}
+
+
+{% block content %}
+
+<div>
+  <div>
+    <div class="text-darkgreen">
+      <h1>{{ title }}</h1>
+    </div>
+
+    <div>
+      <br/>
+      <p>{{ text1 }}</p>
+      <p>{{ text2 }}</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

@@ -10,8 +10,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class CustumRegisterSerializer(RegisterSerializer):
-    first_name = serializers.CharField(max_length=10, min_length=2, required=True)
-    # is_active = serializers.BooleanField()
+    first_name = serializers.CharField(max_length=30, min_length=2, required=True)
+    last_name = serializers.CharField(max_length=30, allow_blank=True)
 
     def validate_first_name(self, first_name):
         '''
@@ -19,8 +19,11 @@ class CustumRegisterSerializer(RegisterSerializer):
         '''
         return first_name
 
-    # def validate_is_active(self, is_active):
-    #     return(is_active)
+    def validate_last_name(self, last_name):
+        '''
+        last_name validation
+        '''
+        return last_name
 
     def get_cleaned_data(self):
         return {
@@ -28,6 +31,6 @@ class CustumRegisterSerializer(RegisterSerializer):
             'password1': self.validated_data.get('password1', ''),
             'email': self.validated_data.get('email', ''),
             'first_name': self.validated_data.get('first_name', ''),
-            # 'is_active': self.validated_data.get('is_active', ''),
+            'last_name': self.validated_data.get('last_name', ''),            
         }
 

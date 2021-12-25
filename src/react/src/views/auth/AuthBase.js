@@ -35,14 +35,14 @@ function AuthBase(props) {
                     element={<SignupConfirm />}
                   />
                   <Route
-                    path="/verification-email-sended"
+                    path="verification-email-sended"
                     element={
                       <EmailSended infoText="계정 확인을 위한 메일이 발송되었습니다." />
                     }
                   />
                   <Route path="/resend-mail" element={<EmailResend />} />
                   <Route
-                    path="/resend-mail/email-sended"
+                    path="resend-mail/email-sended"
                     element={
                       <EmailSended infoText="계정 인증 메일이 재발송되었습니다." />
                     }
@@ -50,17 +50,17 @@ function AuthBase(props) {
                   {/* Password Reset */}
                   <Route path="password-reset" element={<PassReset />} />
                   <Route
-                    path="password-reset/:uid/:token/confirm"
+                    path="api/auth/password-reset/:uid/:token/confirm"
                     element={<PassResetConfirm />}
                   />
                   <Route
-                    path="/password-reset/email-sended"
+                    path="password-reset/email-sended"
                     element={
                       <EmailSended infoText="비밀번호 재설정을 위한 메일이 발송되었습니다." />
                     }
                   />
                   <Route
-                    path="/password-reset/done"
+                    path="password-reset/done"
                     element={<PassResetDone />}
                   />
                 </Route>

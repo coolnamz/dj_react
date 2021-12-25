@@ -6,7 +6,6 @@ function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
-  const [showauth, setShowAuth] = useState(false);
   // const [isAuth, setIsAuth] = useState(false);
 
   // useEffect(() => {
@@ -48,7 +47,6 @@ function Login(props) {
         if (data.non_field_errors) {
           if (/^이메일\s주소/.test(data.non_field_errors)) {
             setErrors("계정 인증이 완료되지 않았습니다.");
-            setShowAuth(true);
           } else if (/^주어진\s자격/.test(data.non_field_errors[0])) {
             setErrors("이메일 주소/비밀번호를 다시 확인해주세요.");
           } else {
@@ -95,23 +93,14 @@ function Login(props) {
           <p className="text-danger">
             <b>[로그인 실패]</b> {errors}
           </p>
-          {showauth && (
-            <p>
-              <input
-                type="button"
-                className="btn btn-danger btn-sm"
-                onClick={() => (location.href = "http://google.com")}
-                value="계정 인증 상황 확인"
-              />
-            </p>
-          )}
         </div>
       )}
       <div className="d-grid col-10 col-lg-6 my-5 mx-auto">
         <input className="btn btn-steelblue" type="submit" value="로그인" />
       </div>
       <div className="my-3 text-center">
-        <Link to="/password-reset"> 비밀번호 초기화</Link>
+        <Link to="/password-reset"> 비밀번호 초기화</Link> |
+        <Link to="/password-reset"> 계정 인증 확인</Link>
       </div>
       <div className="form-group text-center">
         계정이 없으신가요? <Link to="/signup">회원 가입</Link>
