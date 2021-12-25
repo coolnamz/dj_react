@@ -6,6 +6,7 @@ function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
+  const [showauth, setShowAuth] = useState(false);
   // const [isAuth, setIsAuth] = useState(false);
 
   // useEffect(() => {
@@ -46,7 +47,8 @@ function Login(props) {
         }
         if (data.non_field_errors) {
           if (/^이메일\s주소/.test(data.non_field_errors)) {
-            setErrors("이메일 인증을 완료하여 주세요,");
+            setErrors("계정 인증이 완료되지 않았습니다.");
+            setShowAuth(true);
           } else if (/^주어진\s자격/.test(data.non_field_errors[0])) {
             setErrors("이메일 주소/비밀번호를 다시 확인해주세요.");
           } else {
@@ -89,10 +91,20 @@ function Login(props) {
         />
       </div>
       {errors && (
-        <div className="login-content">
-          <p className="text-danger text-center">
+        <div className="login-content text-center">
+          <p className="text-danger">
             <b>[로그인 실패]</b> {errors}
           </p>
+          {showauth && (
+            <p>
+              <input
+                type="button"
+                className="btn btn-danger btn-sm"
+                onClick={() => (location.href = "http://google.com")}
+                value="계정 인증 상황 확인"
+              />
+            </p>
+          )}
         </div>
       )}
       <div className="d-grid col-10 col-lg-6 my-5 mx-auto">
