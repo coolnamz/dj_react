@@ -34,13 +34,13 @@ function AuthBase(props) {
                     path="api/auth/register/account-confirm-email/:key/confirm"
                     element={<SignupConfirm />}
                   />
-                  <Route path="resend-mail" element={<EmailResend />} />
                   <Route
                     path="/verification-email-sended"
                     element={
                       <EmailSended infoText="계정 확인을 위한 메일이 발송되었습니다." />
                     }
                   />
+                  <Route path="/resend-mail" element={<EmailResend />} />
                   <Route
                     path="/resend-mail/email-sended"
                     element={

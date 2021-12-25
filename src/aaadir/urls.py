@@ -16,18 +16,23 @@ Including another URLconf
 from django.contrib import admin
 from django.views.generic import TemplateView, RedirectView
 from django.urls import path, include, re_path
-
+from .views import CustomConfirmEmailView, ResendMail, account_activate_from_root
 
 urlpatterns = [
     re_path('^$', TemplateView.as_view(template_name='react.html')),
     path('admin/', admin.site.urls),
 
-    # 계정 confirm 처리를 시행하는 url (이메일로 전송된 것) - api/auth보다 앞에 위치해야 함
+    # User가 1차로 계정 이메일 인증 - api/auth보다 앞에 위치해야 함
     re_path(
-        r'^api/auth/register/account-confirm-email/(?P<key>[-:\w]+)/$', RedirectView.as_view(url="confirm"),
-        name='account_confirm_email',
+        r'^api/auth/register/account-confirm-email/(?P<key>[-:\w]+)/$', CustomConfirmEmailView.as_view(),
+        name='account_confirm_user',
     ),
+    path('account-confirm-user/resend-mail/', ResendMail.as_view(), name='account-confirm-user-resend'),
 
+    # Root user가 2차로 계정 최종 승인
+    path('account-activate-root/<int:id>/<str:token>/', account_activate_from_root, name='account_activate_root'),
+
+    # API path
     path('api/auth/', include('users.urls')),
     path('api/posts/', include('posts.urls')),
 

@@ -1,0 +1,33 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+{% load account %}
+
+{% block head_title %}{{ title1 }}{% endblock %}
+
+
+{% block content %}
+
+<div>
+    <div>
+      {% if title1 != "" %}
+      <div class="text-darkgreen">
+        <h1>{{ title1 }}</h1>
+      </div>
+      {% endif %}
+      {% if title2 != "" %}
+      <div class="text-darkred">
+        <h1>{{ title2 }}</h1>
+      </div>
+      {% endif %}
+      <div>
+        <br/>
+        <p>{{ text1 }}</p>
+        <p>{{ text2 }}</p>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+
