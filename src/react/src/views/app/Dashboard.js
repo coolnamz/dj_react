@@ -1,13 +1,8 @@
 import React, { useState, useEffect, Fragment } from "react";
-import CheckAuth from "../auth/CheckAuth";
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [isAuth, setIsAuth] = useState(false);
-
-  useEffect(() => {
-    CheckAuth(setIsAuth, setUserData);
-  }, []);
 
   return (
     <div>

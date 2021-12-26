@@ -9,6 +9,7 @@ function CheckEmailResult({ accountState, email }) {
     resend_mail: false,
     request_root: false,
   });
+  const [requestRootResult, setRequestRootResult] = useState(null);
 
   useEffect(() => {
     makeAccountDetail(accountState);
@@ -76,12 +77,8 @@ function CheckEmailResult({ accountState, email }) {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.detail === "ok") {
-          navigate("/resend-mail/email-sended");
-        } else {
-          setError(data.detail);
-        }
-        console.log(data);
+        setRequestRootResult(data.detail);
+        console.log(data.detail);
       })
       .catch((err) => {
         console.log(err);
@@ -160,6 +157,15 @@ function CheckEmailResult({ accountState, email }) {
           </tr>
         </tbody>
       </table>
+
+      {requestRootResult && (
+        <div className="login-content">
+          <p className="text-danger text-center">
+            <b>[요청 상황]</b> {requestRootResult}
+          </p>
+        </div>
+      )}
+
       <div className="d-flex justify-content-center">
         <button
           type="button"

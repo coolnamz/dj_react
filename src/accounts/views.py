@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.response import Response
 import requests
+import datetime
 
 from allauth.account.models import EmailAddress
 from users.models import CustomUser
@@ -46,6 +47,7 @@ class CustomConfirmEmailView(ConfirmEmailView):
 
             # 사용자 1차 인증은 승인
             user.email_verified = True
+            user.last_confirm_request = datetime.datetime.now()
             user.save()
 
             # 관리자 2차 인증을 위한 메일 관리자에게 보내기
@@ -213,17 +215,24 @@ class ResendRequestToRoot(APIView):
         except:
             return Response({"detail": "등록되지 않은 이메일 주소입니다."})
 
-        if not email_user.verified:
-            user = CustomUser.objects.get(email=email_post)
-            email = make_email_to_root(request, user, email_user)
-            try:
-                email.send()
-                return Response({"detail": "관리자 승인 요청이 전송되었습니다."})
-            except:
-                return Response({"detail": "승인 요청 전송에 실패하였습니다."})
-        else:
+        if email_user.verified:
             return Response({"detail": "이미 인증되어 있는 계정입니다."})
 
+        else:
+            user = CustomUser.objects.get(email=email_post)
+            if user.last_confirm_request > datetime.datetime.now() - datetime.timedelta(days=5):
+                # last_request_day = user.last_confirm_request.strftime('%Y-%m-%d %H:%M')
+                user.last_confirm_request
+                return Response({"detail": f"최근 5일 이내에 승인 요청을 했었습니다."})
+            else:            
+                try:
+                    email = make_email_to_root(request, user, email_user)
+                    email.send()
+                    user.last_confirm_request = datetime.datetime.now()
+                    user.save()
+                    return Response({"detail": "관리자 승인 요청이 전송되었습니다."})
+                except:
+                    return Response({"detail": "승인 요청 전송에 실패하였습니다."})
 
 
 
