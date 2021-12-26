@@ -62,10 +62,10 @@ function CheckEmailResult({ accountState, email }) {
       });
   }
 
-  function requestToRoot(e) {
+  function requestToVerify(e) {
     e.preventDefault();
 
-    fetch("/auth/register/resend-email/", {
+    fetch("/auth/account-activate-root/resend-mail/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -149,7 +149,12 @@ function CheckEmailResult({ accountState, email }) {
             </td>
             <td className="text-center">
               {accountState === "user_only" && (
-                <button className="badge btn-steelblue">재신청</button>
+                <button
+                  className="badge btn-steelblue"
+                  onClick={(e) => requestToVerify(e)}
+                >
+                  재신청
+                </button>
               )}
             </td>
           </tr>

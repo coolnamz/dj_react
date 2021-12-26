@@ -218,9 +218,9 @@ class ResendRequestToRoot(APIView):
             email = make_email_to_root(request, user, email_user)
             try:
                 email.send()
-                return Response({"detail": "이메일이 전송되었습니다."})
+                return Response({"detail": "관리자 승인 요청이 전송되었습니다."})
             except:
-                return Response({"detail": "전송에 실패하였습니다."})
+                return Response({"detail": "승인 요청 전송에 실패하였습니다."})
         else:
             return Response({"detail": "이미 인증되어 있는 계정입니다."})
 
