@@ -8,7 +8,7 @@ function PassReset() {
   const [error, setError] = useState("");
 
   function sendEmail(inputData) {
-    fetch("/api/auth/password/reset/", {
+    fetch("/auth/password/reset/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

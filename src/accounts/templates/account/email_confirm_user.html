@@ -35,7 +35,7 @@
   <p>이 이메일 인증 링크가 만료되었거나 유효하지 않습니다.</p> 
   <p>이메일 인증 링크 재전송을 원하시면 아래를 입력해주세요.</p>
   <br />
-  <form method="post" action="{% url 'account-confirm-user-resend' %}">
+  <form method="post" action="{% url 'account_confirm_user_resend' %}">
     {% csrf_token %}
       <label>가입 이메일 주소: </label>
       <input type="email" name="email"></input>

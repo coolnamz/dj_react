@@ -24,7 +24,7 @@ function Login(props) {
       password: password,
     };
 
-    fetch("/api/auth/login/", {
+    fetch("/auth/login/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -99,8 +99,8 @@ function Login(props) {
         <input className="btn btn-steelblue" type="submit" value="로그인" />
       </div>
       <div className="my-3 text-center">
-        <Link to="/password-reset"> 비밀번호 초기화</Link> |
-        <Link to="/password-reset"> 계정 인증 확인</Link>
+        <Link to="/check-email"> 이메일 확인</Link> |
+        <Link to="/password-reset"> 비밀번호 초기화</Link>
       </div>
       <div className="form-group text-center">
         계정이 없으신가요? <Link to="/signup">회원 가입</Link>

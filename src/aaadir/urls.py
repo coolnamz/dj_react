@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # API path
-    path('api/auth/', include('accounts.urls')),
+    path('auth/', include('accounts.urls')),
     path('api/posts/', include('posts.urls')),
     
     # 그 외 모든 url은 Reactjs로 보냄

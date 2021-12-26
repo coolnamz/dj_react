@@ -9,6 +9,7 @@ import EmailSended from "./EmailSended";
 import PassReset from "./PassReset";
 import PassResetConfirm from "./PassResetConfirm";
 import PassResetDone from "./PassResetDone";
+import CheckEmail from "./CheckEmail";
 
 function AuthBase(props) {
   return (
@@ -31,7 +32,7 @@ function AuthBase(props) {
                   {/* Account Singup & Verification */}
                   <Route path="signup" element={<Signup />} />
                   <Route
-                    path="api/auth/register/account-confirm-email/:key/confirm"
+                    path="auth/register/account-confirm-email/:key/confirm"
                     element={<SignupConfirm />}
                   />
                   <Route
@@ -40,7 +41,7 @@ function AuthBase(props) {
                       <EmailSended infoText="계정 확인을 위한 메일이 발송되었습니다." />
                     }
                   />
-                  <Route path="/resend-mail" element={<EmailResend />} />
+                  <Route path="resend-mail" element={<EmailResend />} />
                   <Route
                     path="resend-mail/email-sended"
                     element={
@@ -50,7 +51,7 @@ function AuthBase(props) {
                   {/* Password Reset */}
                   <Route path="password-reset" element={<PassReset />} />
                   <Route
-                    path="api/auth/password-reset/:uid/:token/confirm"
+                    path="auth/password-reset/:uid/:token/confirm"
                     element={<PassResetConfirm />}
                   />
                   <Route
@@ -63,6 +64,7 @@ function AuthBase(props) {
                     path="password-reset/done"
                     element={<PassResetDone />}
                   />
+                  <Route path="check-email" element={<CheckEmail />} />
                 </Route>
               </Routes>
             </div>

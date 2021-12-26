@@ -22,7 +22,7 @@ function Signup() {
       last_name: last_name,
     };
 
-    fetch("/api/auth/register/", {
+    fetch("/auth/register/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +76,9 @@ function Signup() {
       <form onSubmit={onSubmit}>
         <div className="my-2 mt-4">
           <label className="form-label" htmlFor="email">
-            이메일 주소<sup>*</sup>
+            <b>
+              이메일 주소<sup>*</sup>
+            </b>
           </label>
           <input
             className="form-control"
@@ -87,38 +89,44 @@ function Signup() {
             required
           />
         </div>
-        <div className="row">
-          <div className="my-2 col-lg-6">
-            <label className="form-label" htmlFor="password1">
+
+        <div className="my-2">
+          <label className="form-label" htmlFor="password1">
+            <b>
               비밀번호<sup>*</sup>
-            </label>
-            <input
-              className="form-control"
-              name="password1"
-              type="password"
-              value={password1}
-              onChange={(e) => setPassword1(e.target.value)}
-              required
-            />
-          </div>
-          <div className="my-2 col-lg-6">
-            <label className="form-label" htmlFor="password2">
-              비밀번호 확인<sup>*</sup>
-            </label>
-            <input
-              className="form-control"
-              name="password2"
-              type="password"
-              value={password2}
-              onChange={(e) => setPassword2(e.target.value)}
-              required
-            />
-          </div>
+            </b>
+          </label>
+          <input
+            className="form-control"
+            name="password1"
+            type="password"
+            value={password1}
+            onChange={(e) => setPassword1(e.target.value)}
+            required
+          />
         </div>
+        <div className="my-2">
+          <label className="form-label" htmlFor="password2">
+            <b>
+              비밀번호 확인<sup>*</sup>
+            </b>
+          </label>
+          <input
+            className="form-control"
+            name="password2"
+            type="password"
+            value={password2}
+            onChange={(e) => setPassword2(e.target.value)}
+            required
+          />
+        </div>
+
         <div className="row">
           <div className="my-2 col-lg-6">
             <label className="form-label" htmlFor="first_name">
-              이름<sup>*</sup>
+              <b>
+                이름<sup>*</sup>
+              </b>
             </label>
             <input
               className="form-control"

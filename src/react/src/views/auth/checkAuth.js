@@ -2,7 +2,7 @@ function CheckAuth(setAuth, setData = null) {
   if (localStorage.getItem("token") === null) {
     window.location.replace("/auth/login");
   } else {
-    fetch("/api/auth/user/", {
+    fetch("/auth/user/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

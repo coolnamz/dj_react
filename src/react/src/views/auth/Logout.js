@@ -16,7 +16,7 @@ function Logout(props) {
   const handleLogout = (e) => {
     e.preventDefault();
 
-    fetch("/api/auth/logout/", {
+    fetch("/auth/logout/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

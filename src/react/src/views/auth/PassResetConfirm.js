@@ -9,7 +9,7 @@ function PassResetConfirm() {
   const [error, setError] = useState(false);
 
   function resetPassword(inputData) {
-    fetch("/api/auth/password/reset/confirm/", {
+    fetch("/auth/password/reset/confirm/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

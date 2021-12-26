@@ -1,6 +1,11 @@
 from django.urls import include, path, re_path
-from .views import CustomConfirmEmailView, ResendMail, account_activate_from_root
 from django.views.generic import TemplateView, RedirectView
+
+from .views import (
+    CustomConfirmEmailView, ResendMail, ResendRequestToRoot,
+    account_activate_from_root,
+    CheckEmailStatus,
+    )
 
 urlpatterns = [
 
@@ -14,7 +19,8 @@ urlpatterns = [
     ),
 
     # 1차 인증 이메일 다시 보내기
-    path('account-confirm-user/resend-mail/', ResendMail.as_view(), name='account-confirm-user-resend'),
+    path('account-confirm-user/resend-mail/', ResendMail.as_view(), name='account_confirm_user_resend'),
+    path('account-activate-root/resend-mail/', ResendRequestToRoot.as_view(), name='account_activate_root_resend'),
 
     # Root user가 2차로 계정 최종 승인
     path('account-activate-root/<int:id>/<str:token>/', account_activate_from_root, name='account_activate_root'),
@@ -26,5 +32,8 @@ urlpatterns = [
     re_path(r'^password-reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,32})/$',
         RedirectView.as_view(url="confirm"),
         name='password_reset_confirm'),
+
+
+    path("check-email/", CheckEmailStatus.as_view(), name="check_email")
 
 ]

@@ -8,19 +8,21 @@ from django.core.mail import EmailMessage
 from allauth.account.views import ConfirmEmailView
 from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
+from rest_framework.views import APIView
+from rest_framework import permissions
+from rest_framework.response import Response
 import requests
 
 from allauth.account.models import EmailAddress
 from users.models import CustomUser
-from .utils import account_activation_token
-
+from .utils import account_activation_token, make_email_to_root
 
 
 # User가 email link를 클릭 -> Root가 2차 인증을 시행하기 위한 메일을 보냄
 class CustomConfirmEmailView(ConfirmEmailView):
     # allauth.account.views.ConfirmEmailView를 override함
     # tmplate_name ==> account/email_confirm.html
-    template_name = "account/email_confirm_user.html"   ###
+    template_name = "account/email_confirm_user.html" 
 
     def post(self, *args, **kwargs):        
         '''
@@ -47,28 +49,15 @@ class CustomConfirmEmailView(ConfirmEmailView):
             user.save()
 
             # 관리자 2차 인증을 위한 메일 관리자에게 보내기
-            user_id = user.pk
-            token = account_activation_token.make_token(user)
-            activate_url = reverse("account_activate_root", kwargs={"id": user_id, "token": token})
-            activate_url = self.request.build_absolute_uri(activate_url)
-            mail_subject = user.first_name + '님의 계정 활성을 위한 메일입니다.'
-            message = render_to_string('account/email_confirm_root.html', {
-                'user': user,
-                'activate_url':activate_url,
-            })
-            to_email = 'nnam27@gmail.com'
-            email = EmailMessage(
-                mail_subject, 
-                message, 
-                to=[to_email]
-            )
+            user = CustomUser.objects.get(email=email_user)
+            email = make_email_to_root(self.request, user, user)
             try:
                 email.send()
             except:
                 context = {
                     "title": "이메일 전송 실패",
                     "text1": "이메일 전송 시스템에 문제가 발생하였습니다.",
-                    "text2": f"{to_email}로 직접 인증 요청을 해 주시기 바랍니다."
+                    "text2": "관리자 메일로 직접 인증 요청을 해 주시기 바랍니다."
                 }
                 return render(self.request, "account/email_confirm_done.html", context)
         else:
@@ -150,15 +139,13 @@ def account_activate_from_root(request, id, token):
         email.send()
 
         context = {
-            "title1": "승인 완료",
-            "title2": "",
+            "title": "승인 완료",
             "text1": f"{email_user} 계정의 승인이 완료되었습니다.",
             "text2": ""
         }
     else:
         context = {
-            "title1": "",
-            "title2": "Activation Link 오류",
+            "title": "",
             "text1": "계정 활성 link에 오류가 있습니다.",
             "text2": ""
         }
@@ -171,7 +158,7 @@ class ResendMail(TemplateView):
     template_name = "account/email_confirm_user_resend.html"
 
     def post(self, request):        
-        api_email_resend = request.build_absolute_uri("/api/auth/register/resend-email/")
+        api_email_resend = request.build_absolute_uri("/auth/register/resend-email/")
         email_post = request.POST['email']
         data = {'email': email_post}
 
@@ -192,7 +179,7 @@ class ResendMail(TemplateView):
                 }
                 return render(self.request, "account/email_confirm_done.html", context)
 
-        redirect_url = reverse("account-confirm-user-resend") + "?email=" + email_post
+        redirect_url = reverse("account_confirm_user_resend") + "?email=" + email_post
         redirect_url = redirect_url + "&status=" + status
         return redirect(redirect_url)  
 
@@ -212,6 +199,53 @@ class ResendMail(TemplateView):
             context["text1"] = f"가입 정보가 없는 이메일 주소입니다." 
             
         context["email"] = self.request.GET['email']
-        return context
-    
+        return context   
 
+
+# Root 인증 요청 다시보내는 API
+class ResendRequestToRoot(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):   
+        try:
+            email_post = request.data["email"]
+            email_user = EmailAddress.objects.get(email=email_post)
+        except:
+            return Response({"detail": "등록되지 않은 이메일 주소입니다."})
+
+        if not email_user.verified:
+            user = CustomUser.objects.get(email=email_post)
+            email = make_email_to_root(request, user, email_user)
+            try:
+                email.send()
+                return Response({"detail": "이메일이 전송되었습니다."})
+            except:
+                return Response({"detail": "전송에 실패하였습니다."})
+        else:
+            return Response({"detail": "이미 인증되어 있는 계정입니다."})
+
+
+
+
+# 계정 인증 상태 확인해주는 API
+class CheckEmailStatus(APIView):    
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        email_post = request.data["email"]
+
+        try: 
+            email_user = EmailAddress.objects.get(email=email_post)
+            user = CustomUser.objects.get(email=email_post)
+
+            if email_user.verified:   
+                data = "user_and_root"
+            elif user.email_verified:
+                data = "user_only"
+            else:
+                data = "not_verified"
+        except:
+            data = "wrong_address"
+
+
+        return Response(data)

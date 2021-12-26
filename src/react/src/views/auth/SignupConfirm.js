@@ -14,7 +14,7 @@ function SignupConfirm() {
     const keyData = {
       key: key,
     };
-    fetch("/api/auth/register/verify-email/", {
+    fetch("/auth/register/verify-email/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
