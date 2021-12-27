@@ -15,6 +15,7 @@ function CheckEmailResult({ accountState, email }) {
     makeAccountDetail(accountState);
   }, []);
 
+  // 전달받은 accountState를 바탕으로 사용자 상태 표시함
   function makeAccountDetail(accountState) {
     if (accountState === "not_verified") {
       const info = {
@@ -37,6 +38,7 @@ function CheckEmailResult({ accountState, email }) {
     }
   }
 
+  // 사용자에게 이메일 인증 재시도할 수 있도록 메일 재발송
   function sendEmail(e) {
     e.preventDefault();
 
@@ -52,7 +54,7 @@ function CheckEmailResult({ accountState, email }) {
       .then((res) => res.json())
       .then((data) => {
         if (data.detail === "ok") {
-          navigate("/resend-mail/email-sended");
+          navigate("/auth/resend-mail/email-sended");
         } else {
           setError(data.detail);
         }
@@ -63,6 +65,7 @@ function CheckEmailResult({ accountState, email }) {
       });
   }
 
+  // 관리자에게 재승인 요청 (특정 기간 이내에 재요청 하는 경우는 반려됨)
   function requestToVerify(e) {
     e.preventDefault();
 
@@ -78,7 +81,6 @@ function CheckEmailResult({ accountState, email }) {
       .then((res) => res.json())
       .then((data) => {
         setRequestRootResult(data.detail);
-        console.log(data.detail);
       })
       .catch((err) => {
         console.log(err);

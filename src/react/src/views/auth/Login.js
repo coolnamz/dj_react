@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { isAuthAtom } from "../../Store";
 
 function Login(props) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState("");
+  const setIsAuth = useSetRecoilState(isAuthAtom);
   // const [isAuth, setIsAuth] = useState(false);
 
   // useEffect(() => {
@@ -36,8 +39,8 @@ function Login(props) {
         if (data.key) {
           localStorage.clear();
           localStorage.setItem("token", data.key);
+          setIsAuth(true);
           navigate("/");
-          props.setIsAuth(true);
         } else {
           setEmail("");
           setPassword("");
@@ -99,11 +102,11 @@ function Login(props) {
         <input className="btn btn-steelblue" type="submit" value="로그인" />
       </div>
       <div className="my-3 text-center">
-        <Link to="/check-email"> 이메일 확인</Link> |
-        <Link to="/password-reset"> 비밀번호 초기화</Link>
+        <Link to="/auth/check-email"> 이메일 확인</Link> |
+        <Link to="/auth/password-reset"> 비밀번호 초기화</Link>
       </div>
       <div className="form-group text-center">
-        계정이 없으신가요? <Link to="/signup">회원 가입</Link>
+        계정이 없으신가요? <Link to="/auth/signup">회원 가입</Link>
       </div>
       <div className="mb-4">
         <p className="text-center">

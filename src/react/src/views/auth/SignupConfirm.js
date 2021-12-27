@@ -88,7 +88,7 @@ function SignupConfirm() {
           </div>
           <div className="d-flex justify-content-center">
             <Link
-              to="/resend-mail"
+              to="/auth/resend-mail"
               type="button"
               className="btn btn-slategray col-8 col-lg-6"
             >

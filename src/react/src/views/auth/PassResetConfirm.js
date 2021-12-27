@@ -19,7 +19,7 @@ function PassResetConfirm() {
       .then((res) => res.json())
       .then((data) => {
         if (/^새로운\s패스워드로/.test(data.detail)) {
-          navigate("/password-reset/done");
+          navigate("/auth/password-reset/done");
         } else {
           setError(true);
         }

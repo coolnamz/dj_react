@@ -76,7 +76,7 @@ function CheckEmail() {
               </button>
               &emsp;
               <button
-                onClick={() => navigate("/")}
+                onClick={() => navigate(-1)}
                 className="btn btn-slategray col-5 col-lg-3 "
               >
                 취소

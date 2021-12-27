@@ -1,9 +1,11 @@
 import React, { useState, useEffect, Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { isAuthAtom } from "../../Store";
 
 function Logout(props) {
   const navigate = useNavigate();
-  // const [isAuth, setIsAuth] = useState(false);
+  const setIsAuth = useSetRecoilState(isAuthAtom);
 
   // useEffect(() => {
   //   if (localStorage.getItem("token") !== null) {
@@ -27,8 +29,7 @@ function Logout(props) {
       .then((data) => {
         localStorage.clear();
         navigate("/");
-        props.setIsAuth(false);
-        // window.location.replace("/");
+        setIsAuth(false);
       });
   };
 

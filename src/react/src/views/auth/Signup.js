@@ -33,7 +33,7 @@ function Signup() {
       .then((data) => {
         if (data.key) {
           localStorage.clear();
-          localStorage.setItem("token", data.key);
+          // localStorage.setItem("token", data.key);
           navigate("/");
         } else {
           setEmail("");
@@ -45,7 +45,7 @@ function Signup() {
           setErrors("회원 가입에 실패하였습니다.");
         }
         if (/확인\s이메일/.test(data.detail)) {
-          navigate("/verification-email-sended");
+          navigate("/auth/verification-email-sended");
         } else if (/이미\s이\s이메일/.test(data.email)) {
           setErrors("이미 가입한 이메일 주소입니다.");
         } else {

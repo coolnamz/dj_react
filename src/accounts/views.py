@@ -220,10 +220,10 @@ class ResendRequestToRoot(APIView):
 
         else:
             user = CustomUser.objects.get(email=email_post)
-            if user.last_confirm_request > datetime.datetime.now() - datetime.timedelta(days=5):
+            if user.last_confirm_request > datetime.datetime.now() - datetime.timedelta(days=3):
                 # last_request_day = user.last_confirm_request.strftime('%Y-%m-%d %H:%M')
                 user.last_confirm_request
-                return Response({"detail": f"최근 5일 이내에 승인 요청을 했었습니다."})
+                return Response({"detail": f"최근 3일 이내 이미 승인 요청을 하였습니다."})
             else:            
                 try:
                     email = make_email_to_root(request, user, email_user)

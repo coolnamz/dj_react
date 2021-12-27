@@ -18,7 +18,7 @@ function PassReset() {
       .then((res) => res.json())
       .then((data) => {
         if (/^패스워드\s초기화\s이메일/.test(data.detail)) {
-          navigate("/password-reset/email-sended");
+          navigate("/auth/password-reset/email-sended");
         } else {
           setError(data.detail);
         }

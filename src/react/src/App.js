@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useIdleTimer } from "react-idle-timer";
+import { useRecoilState } from "recoil";
 
 import "./App.css";
+import { isAuthAtom } from "./Store";
 import Navbar from "./components/Navbar";
 
 import HomeUI from "./components/HomeUI";
@@ -15,7 +17,7 @@ import Logout from "./views/auth/Logout";
 import Dashboard from "./views/app/Dashboard";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useRecoilState(isAuthAtom);
 
   useEffect(() => {
     if (localStorage.getItem("token") !== null) {
@@ -38,6 +40,7 @@ function App() {
         .then((res) => res.json())
         .then((data) => {
           localStorage.clear();
+          setIsAuth(false);
           window.location.replace("/");
         });
       const logoutTime = new Date(getLastActiveTime());
@@ -52,25 +55,23 @@ function App() {
 
   return (
     <div>
-      {isAuth ? (
-        <div>
-          <Navbar />
-          <Routes>
+      <div>
+        <Navbar />
+        <Routes>
+          {localStorage.getItem("token") !== null ? (
             <Route path="/">
               <Route index element={<HomeUI />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="posts" element={<PostsList />} />
               <Route path="posts/:slug" element={<PostPage />} />
               <Route path="posts/create" element={<PostCreate />} />
-              <Route path="logout" element={<Logout setIsAuth={setIsAuth} />} />
+              <Route path="logout" element={<Logout />} />
             </Route>
-          </Routes>
-        </div>
-      ) : (
-        <div>
-          <AuthBase setIsAuth={setIsAuth} />
-        </div>
-      )}
+          ) : (
+            <Route path="*" element={<AuthBase />} />
+          )}
+        </Routes>
+      </div>
     </div>
   );
 }
