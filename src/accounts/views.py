@@ -52,7 +52,7 @@ class CustomConfirmEmailView(ConfirmEmailView):
 
             # 관리자 2차 인증을 위한 메일 관리자에게 보내기
             user = CustomUser.objects.get(email=email_user)
-            email = make_email_to_root(self.request, user, user)
+            email = make_email_to_root(self.request, user)
             try:
                 email.send()
             except:
@@ -147,7 +147,7 @@ def account_activate_from_root(request, id, token):
         }
     else:
         context = {
-            "title": "",
+            "title": "승인 실패",
             "text1": "계정 활성 link에 오류가 있습니다.",
             "text2": ""
         }
@@ -226,7 +226,7 @@ class ResendRequestToRoot(APIView):
                 return Response({"detail": f"최근 3일 이내 이미 승인 요청을 하였습니다."})
             else:            
                 try:
-                    email = make_email_to_root(request, user, email_user)
+                    email = make_email_to_root(request, user)
                     email.send()
                     user.last_confirm_request = datetime.datetime.now()
                     user.save()
