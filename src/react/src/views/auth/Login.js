@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { isAuthAtom } from "../../Store";
@@ -19,48 +20,82 @@ function Login(props) {
   //   }
   // }, []);
 
-  const onSubmit = (e) => {
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const user = {
+  //     email: email,
+  //     password: password,
+  //   };
+
+  //   fetch("/auth/login/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(user),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.key) {
+  //         localStorage.clear();
+  //         localStorage.setItem("token", data.key);
+  //         setIsAuth(true);
+  //         navigate("/");
+  //       } else {
+  //         setEmail("");
+  //         setPassword("");
+  //         localStorage.clear();
+  //         setErrors("로그인 중 오류 발생");
+  //       }
+  //       if (data.non_field_errors) {
+  //         if (/^이메일\s주소/.test(data.non_field_errors)) {
+  //           setErrors("계정 인증이 완료되지 않았습니다.");
+  //         } else if (/^주어진\s자격/.test(data.non_field_errors[0])) {
+  //           setErrors("이메일 주소/비밀번호를 다시 확인해주세요.");
+  //         } else {
+  //           setErrors("로그인 중 오류 발생");
+  //         }
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+  async function onSubmit(e) {
     e.preventDefault();
 
-    const user = {
-      email: email,
-      password: password,
-    };
-
-    fetch("/auth/login/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.key) {
-          localStorage.clear();
-          localStorage.setItem("token", data.key);
-          setIsAuth(true);
-          navigate("/");
+    try {
+      const res = await axios({
+        method: "post",
+        url: "/auth/login/",
+        data: {
+          email: email,
+          password: password,
+        },
+      });
+      localStorage.clear();
+      localStorage.setItem("token", res.data.key);
+      setIsAuth(true);
+      navigate("/");
+    } catch (err) {
+      setEmail("");
+      setPassword("");
+      localStorage.clear();
+      setIsAuth(false);
+      // Error message 처리: err.response.data.non_field_errors
+      const error_message = Object.values(err.response.data)[0];
+      if (error_message) {
+        if (/^이메일\s주소/.test(error_message)) {
+          setErrors("계정 인증이 완료되지 않았습니다.");
+        } else if (/^주어진\s자격/.test(error_message)) {
+          setErrors("이메일 주소/비밀번호를 다시 확인해주세요.");
         } else {
-          setEmail("");
-          setPassword("");
-          localStorage.clear();
           setErrors("로그인 중 오류 발생");
         }
-        if (data.non_field_errors) {
-          if (/^이메일\s주소/.test(data.non_field_errors)) {
-            setErrors("계정 인증이 완료되지 않았습니다.");
-          } else if (/^주어진\s자격/.test(data.non_field_errors[0])) {
-            setErrors("이메일 주소/비밀번호를 다시 확인해주세요.");
-          } else {
-            setErrors("로그인 중 오류 발생");
-          }
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+      }
+    }
+  }
 
   return (
     <form onSubmit={onSubmit}>
@@ -102,7 +137,7 @@ function Login(props) {
         <input className="btn btn-steelblue" type="submit" value="로그인" />
       </div>
       <div className="my-3 text-center">
-        <Link to="/auth/check-email"> 이메일 확인</Link> |
+        <Link to="/auth/check-account"> 이메일 확인</Link> |
         <Link to="/auth/password-reset"> 비밀번호 초기화</Link>
       </div>
       <div className="form-group text-center">

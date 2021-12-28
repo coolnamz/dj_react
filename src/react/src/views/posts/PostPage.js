@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 
-function PostPage(match) {
+function PostPage() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
   const PostAPIAddress = `/api/posts/${slug}/`;
@@ -13,7 +13,10 @@ function PostPage(match) {
 
   async function getPost() {
     try {
-      const response = await axios.get(PostAPIAddress);
+      const response = await axios({
+        method: "get",
+        url: PostAPIAddress,
+      });
       setPost(response.data);
     } catch (error) {
       console.error(error);

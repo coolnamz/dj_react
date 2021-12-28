@@ -9,7 +9,7 @@ from allauth.account.views import ConfirmEmailView
 from allauth.account import app_settings
 from allauth.account.adapter import get_adapter
 from rest_framework.views import APIView
-from rest_framework import permissions
+from rest_framework import permissions, status
 from rest_framework.response import Response
 import requests
 import datetime
@@ -213,17 +213,17 @@ class ResendRequestToRoot(APIView):
             email_post = request.data["email"]
             email_user = EmailAddress.objects.get(email=email_post)
         except:
-            return Response({"detail": "등록되지 않은 이메일 주소입니다."})
+            return Response({"detail": "등록되지 않은 이메일 주소입니다."}, status.HTTP_400_BAD_REQUEST)
 
         if email_user.verified:
-            return Response({"detail": "이미 인증되어 있는 계정입니다."})
+            return Response({"detail": "이미 인증되어 있는 계정입니다."}, status.HTTP_400_BAD_REQUEST)
 
         else:
             user = CustomUser.objects.get(email=email_post)
             if user.last_confirm_request > datetime.datetime.now() - datetime.timedelta(days=3):
                 # last_request_day = user.last_confirm_request.strftime('%Y-%m-%d %H:%M')
                 user.last_confirm_request
-                return Response({"detail": f"최근 3일 이내 이미 승인 요청을 하였습니다."})
+                return Response({"detail": f"최근 3일 이내 이미 승인 요청을 하였습니다."}, status.HTTP_400_BAD_REQUEST)
             else:            
                 try:
                     email = make_email_to_root(request, user)
@@ -232,7 +232,7 @@ class ResendRequestToRoot(APIView):
                     user.save()
                     return Response({"detail": "관리자 승인 요청이 전송되었습니다."})
                 except:
-                    return Response({"detail": "승인 요청 전송에 실패하였습니다."})
+                    return Response({"detail": "승인 요청 전송에 실패하였습니다."}, status.HTTP_400_BAD_REQUEST)
 
 
 

@@ -170,6 +170,11 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 
 ## CORS settings
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000', 
+    'http://localhost:8000', 
+    'http://127.0.0.1:3000'
+]
 
 CORS_URLS_REGEX = r'^/api.*'
 CORS_ORIGIN_ALLOW_ALL = True
@@ -180,7 +185,6 @@ CORS_ORIGIN_WHITELIST = (
     # 'your-domain.com',
     # 'your-bucket-here.s3-us-west-2.amazonaws.com',
 )
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://localhost:8000']
 
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': (

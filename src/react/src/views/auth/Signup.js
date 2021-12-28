@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import cookie from "react-cookies";
 
 function Signup() {
@@ -11,50 +12,81 @@ function Signup() {
   const [last_name, setLastName] = useState("");
   const [errors, setErrors] = useState("");
 
-  const onSubmit = (e) => {
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const user = {
+  //     email: email,
+  //     password1: password1,
+  //     password2: password2,
+  //     first_name: first_name,
+  //     last_name: last_name,
+  //   };
+
+  //   fetch("/auth/register/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(user),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.key) {
+  //         localStorage.clear();
+  //         // localStorage.setItem("token", data.key);
+  //         navigate("/");
+  //       } else {
+  //         setEmail("");
+  //         setPassword1("");
+  //         setPassword2("");
+  //         setFirstName("");
+  //         setLastName("");
+  //         localStorage.clear();
+  //         setErrors("회원 가입에 실패하였습니다.");
+  //       }
+  //       if (/확인\s이메일/.test(data.detail)) {
+  //         navigate("/auth/verification-email-sended");
+  //       } else if (/이미\s이\s이메일/.test(data.email)) {
+  //         setErrors("이미 가입한 이메일 주소입니다.");
+  //       } else {
+  //         setErrors("회원 가입에 실패하였습니다.");
+  //       }
+
+  //       console.log(data);
+  //     });
+  // };
+
+  async function onSubmit(e) {
     e.preventDefault();
-
-    const user = {
-      email: email,
-      password1: password1,
-      password2: password2,
-      first_name: first_name,
-      last_name: last_name,
-    };
-
-    fetch("/auth/register/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.key) {
-          localStorage.clear();
-          // localStorage.setItem("token", data.key);
-          navigate("/");
-        } else {
-          setEmail("");
-          setPassword1("");
-          setPassword2("");
-          setFirstName("");
-          setLastName("");
-          localStorage.clear();
-          setErrors("회원 가입에 실패하였습니다.");
-        }
-        if (/확인\s이메일/.test(data.detail)) {
-          navigate("/auth/verification-email-sended");
-        } else if (/이미\s이\s이메일/.test(data.email)) {
-          setErrors("이미 가입한 이메일 주소입니다.");
-        } else {
-          setErrors("회원 가입에 실패하였습니다.");
-        }
-
-        console.log(data);
+    try {
+      const res = await axios({
+        method: "post",
+        url: "/auth/register/",
+        data: {
+          email: email,
+          password1: password1,
+          password2: password2,
+          first_name: first_name,
+          last_name: last_name,
+        },
       });
-  };
+      if (/확인\s이메일/.test(res.data.detail)) {
+        navigate("/auth/verification-email-sended");
+      } else {
+        setEmail("");
+        setPassword1("");
+        setPassword2("");
+        setFirstName("");
+        setLastName("");
+        setErrors("회원 가입에 실패하였습니다.");
+      }
+    } catch (err) {
+      // 보통 err.response.data.email로 error messeage가 전달됨
+      const error_message = Object.values(err.response.data)[0];
+      setErrors(error_message);
+    }
+  }
 
   return (
     <div>
@@ -153,7 +185,7 @@ function Signup() {
         <div className="text-center text-danger">
           {errors && (
             <p>
-              <b>[가입 실패] </b>
+              <b>[실패] </b>
               {errors}
             </p>
           )}

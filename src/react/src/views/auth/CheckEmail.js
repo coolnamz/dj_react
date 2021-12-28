@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import CheckEmailResult from "./CheckEmailResult";
 
 function CheckEmail() {
@@ -7,21 +8,34 @@ function CheckEmail() {
   const [email, setEmail] = useState(null);
   const [accountState, setAccountState] = useState("");
 
-  function sendEmail(inputData) {
-    fetch("/auth/check-email/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(inputData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setAccountState(data);
-      })
-      .catch((err) => {
-        console.log(err);
+  // function sendEmail(inputData) {
+  //   fetch("/auth/check-email/", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(inputData),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setAccountState(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
+  async function sendEmail(body) {
+    try {
+      const res = await axios({
+        method: "post",
+        url: "/auth/check-email/",
+        data: body,
       });
+      setAccountState(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function handleSubmit(e) {

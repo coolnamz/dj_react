@@ -5,7 +5,6 @@ import { useRecoilValue } from "recoil";
 import { isAuthAtom } from "../../Store";
 import Login from "./Login";
 import Signup from "./Signup";
-import SignupConfirm from "./SignupConfirm";
 import EmailResend from "./EmailResend";
 import EmailSended from "./EmailSended";
 import PassReset from "./PassReset";
@@ -33,10 +32,10 @@ function AuthBase() {
                     <Route index element={<Login />} />
                     {/* Account Singup & Verification */}
                     <Route path="auth/signup" element={<Signup />} />
-                    <Route
-                      path="auth/register/account-confirm-email/:key/confirm"
+                    {/* <Route
+                      path="auth/register/account-confirm-email/:key/confirm" // django로부터 보내진 주소
                       element={<SignupConfirm />}
-                    />
+                    /> */}
                     <Route
                       path="auth/verification-email-sended"
                       element={
@@ -53,7 +52,7 @@ function AuthBase() {
                     {/* Password Reset */}
                     <Route path="auth/password-reset" element={<PassReset />} />
                     <Route
-                      path="auth/password-reset/:uid/:token/confirm"
+                      path="auth/password-reset/:uid/:token/confirm" // django로부터 보내진 주소
                       element={<PassResetConfirm />}
                     />
                     <Route
@@ -66,7 +65,7 @@ function AuthBase() {
                       path="auth/password-reset/done"
                       element={<PassResetDone />}
                     />
-                    <Route path="auth/check-email" element={<CheckEmail />} />
+                    <Route path="auth/check-account" element={<CheckEmail />} />
                   </Route>
                 </Routes>
               </div>
