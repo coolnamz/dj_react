@@ -16,7 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.urls import path, include, re_path
+from rest_framework import routers
 
+from labsbx.views import LabsbxViewSet, LabsbxsampleViewSet
+
+router = routers.DefaultRouter()
+router.register('labsbx', LabsbxViewSet, basename='labsbx')
+router.register('labsbxsample', LabsbxsampleViewSet, basename='labsbxsample')
 
 urlpatterns = [
     re_path('^$', TemplateView.as_view(template_name='react.html')),
@@ -24,6 +30,7 @@ urlpatterns = [
 
     # API path
     path('auth/', include('accounts.urls')),
+    path('api/', include(router.urls)),
     path('api/posts/', include('posts.urls')),
     
     # 그 외 모든 url은 Reactjs로 보냄
